@@ -1,10 +1,3 @@
-# UdonEncoding
-
-Unicode encoder/decoder for UdonSharp.
-
-## Examples
-
-```cs
 using UnityEngine;
 using UdonSharp;
 using Koyashiro.UdonEncoding;
@@ -27,4 +20,3 @@ public class UdonEncodingSample : UdonSharpBehaviour
         Debug.Log($"0x{bytes[6]:x}"); // 0x8a
     }
 }
-```
