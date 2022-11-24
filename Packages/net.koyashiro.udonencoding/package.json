@@ -1,7 +1,7 @@
 {
   "name": "net.koyashiro.udonencoding",
   "displayName": "UdonEncoding",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Unicode encoder/decoder for UdonSharp",
   "homepage": "https://github.com/koyashiro/udon-encoding",
   "bugs": {
@@ -24,7 +24,7 @@
       "path": "Samples~/UdonEncodingSample"
     }
   ],
-  "url": "https://github.com/koyashiro/udon-encoding/releases/download/v0.1.0/net.koyashiro.udonencoding-0.1.0.zip",
+  "url": "https://github.com/koyashiro/udon-encoding/releases/download/v0.2.0/net.koyashiro.udonencoding-0.2.0.zip",
   "vpmDependencies": {
     "com.vrchat.udonsharp": "1.1.5",
     "net.koyashiro.udonexception": "0.2.0",
