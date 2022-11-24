@@ -2,8 +2,7 @@
     "name": "Koyashiro.UdonEncoding.Runtime",
     "references": [
         "UdonSharp.Runtime",
-        "Koyashiro.UdonException.Runtime",
-        "Koyashiro.UdonList.Runtime"
+        "Koyashiro.UdonException.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

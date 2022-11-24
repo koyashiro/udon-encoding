@@ -1,7 +1,8 @@
-﻿namespace Koyashiro.UdonEncoding
+﻿using System;
+
+namespace Koyashiro.UdonEncoding
 {
     using Koyashiro.UdonException;
-    using Koyashiro.UdonList;
 
     public static class UdonUTF32
     {
@@ -14,7 +15,8 @@
                 UdonException.ThrowArgumentNullException(nameof(chars));
             }
 
-            var buf = UdonByteList.New(chars.Length * 4);
+            var buf = new byte[chars.Length * 4];
+            var count = 0;
 
             for (var i = 0; i < chars.Length; i++)
             {
@@ -22,10 +24,10 @@
 
                 if (c1 < 0xd800)
                 {
-                    buf.Add((byte)(c1 & 0xff));
-                    buf.Add((byte)((c1 >> 8) & 0xff));
-                    buf.Add((byte)0x00);
-                    buf.Add((byte)0x00);
+                    buf[count++] = (byte)(c1 & 0xff);
+                    buf[count++] = (byte)((c1 >> 8) & 0xff);
+                    buf[count++] = (byte)0x00;
+                    buf[count++] = (byte)0x00;
                 }
                 else if (c1 < 0xdbff)
                 {
@@ -34,10 +36,10 @@
                     if (0xdc00 <= c2 && c2 < 0xdfff)
                     {
                         var n = (uint)(0x10000 + (c1 - 0xd800) * 0x400 + (c2 - 0xdc00));
-                        buf.Add((byte)(n & 0xff));
-                        buf.Add((byte)((n >> 8) & 0xff));
-                        buf.Add((byte)((n >> 16) & 0xff));
-                        buf.Add((byte)((n >> 24) & 0xff));
+                        buf[count++] = (byte)(n & 0xff);
+                        buf[count++] = (byte)((n >> 8) & 0xff);
+                        buf[count++] = (byte)((n >> 16) & 0xff);
+                        buf[count++] = (byte)((n >> 24) & 0xff);
                     }
                     else
                     {
@@ -52,7 +54,8 @@
                 }
             }
 
-            var bytes = buf.ToArray();
+            var bytes = new byte[count];
+            Array.Copy(buf, bytes, count);
 
             return bytes;
         }
@@ -74,7 +77,8 @@
                 UdonException.ThrowArgumentNullException(nameof(bytes));
             }
 
-            var buf = UdonCharList.New(bytes.Length / 2);
+            var buf = new char[bytes.Length / 2];
+            var count = 0;
 
             for (var i = 0; i < bytes.Length / 4; i++)
             {
@@ -88,17 +92,18 @@
 
                 if (c < 0x10000)
                 {
-                    buf.Add((char)c);
+                    buf[count++] = (char)c;
                 }
                 else
                 {
-                    buf.Add((char)((c - 0x10000) / 0x400 + 0xd800));
-                    // buf.Add((char)((c - 0x10000) % 0x400 + 0xd800));
-                    buf.Add((char)((c - 0x10000) - (0x400 * ((c - 0x10000) / 0x400)) + 0xdc00));
+                    buf[count++] = (char)((c - 0x10000) / 0x400 + 0xd800);
+                    // buf[count++] = (char)((c - 0x10000) % 0x400 + 0xd800);
+                    buf[count++] = (char)((c - 0x10000) - (0x400 * ((c - 0x10000) / 0x400)) + 0xdc00);
                 }
             }
 
-            var chars = buf.ToArray();
+            var chars = new char[count];
+            Array.Copy(buf, chars, count);
 
             return chars;
         }
