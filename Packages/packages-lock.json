@@ -191,6 +191,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "net.koyashiro.udonencoding.tests": {
+      "version": "file:net.koyashiro.udonencoding.tests",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "net.koyashiro.udontest": {
       "version": "file:net.koyashiro.udontest",
       "depth": 0,
