@@ -1,7 +1,9 @@
 {
-    "name": "Koyashiro.UdonEncoding.Runtime",
+    "name": "Koyashiro.UdonEncoding.Tests",
     "references": [
-        "UdonSharp.Runtime"
+        "UdonSharp.Runtime",
+        "Koyashiro.UdonTest",
+        "Koyashiro.UdonEncoding"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
