@@ -1,9 +1,8 @@
 ﻿using System;
+using Koyashiro.UdonEncoding.Internal;
 
 namespace Koyashiro.UdonEncoding
 {
-    using Koyashiro.UdonException;
-
     public static class UdonUTF8
     {
         private const string EXCEPTION_INVALID_UNICODE_CODEPOINTS = "The byte array contains invalid Unicode code points.";
@@ -12,7 +11,7 @@ namespace Koyashiro.UdonEncoding
         {
             if (chars == null)
             {
-                UdonException.ThrowArgumentNullException(nameof(chars));
+                ExceptionHelper.ThrowArgumentNullException(nameof(chars));
                 return default;
             }
 
@@ -59,7 +58,7 @@ namespace Koyashiro.UdonEncoding
         {
             if (s == null)
             {
-                UdonException.ThrowArgumentNullException(nameof(s));
+                ExceptionHelper.ThrowArgumentNullException(nameof(s));
                 return default;
             }
 
@@ -70,7 +69,7 @@ namespace Koyashiro.UdonEncoding
         {
             if (bytes == null)
             {
-                UdonException.ThrowArgumentNullException(nameof(bytes));
+                ExceptionHelper.ThrowArgumentNullException(nameof(bytes));
                 return default;
             }
 
@@ -114,7 +113,7 @@ namespace Koyashiro.UdonEncoding
                 }
                 else
                 {
-                    UdonException.ThrowArgumentException(EXCEPTION_INVALID_UNICODE_CODEPOINTS);
+                    ExceptionHelper.ThrowArgumentException(EXCEPTION_INVALID_UNICODE_CODEPOINTS);
                     return default;
                 }
             }
@@ -130,7 +129,7 @@ namespace Koyashiro.UdonEncoding
         {
             if (bytes == null)
             {
-                UdonException.ThrowArgumentNullException(nameof(bytes));
+                ExceptionHelper.ThrowArgumentNullException(nameof(bytes));
                 return default;
             }
 

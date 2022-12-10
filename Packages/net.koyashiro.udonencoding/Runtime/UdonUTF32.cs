@@ -1,9 +1,8 @@
 ﻿using System;
+using Koyashiro.UdonEncoding.Internal;
 
 namespace Koyashiro.UdonEncoding
 {
-    using Koyashiro.UdonException;
-
     public static class UdonUTF32
     {
         private const string EXCEPTION_INVALID_UNICODE_CODEPOINTS = "The byte array contains invalid Unicode code points.";
@@ -12,7 +11,7 @@ namespace Koyashiro.UdonEncoding
         {
             if (chars == null)
             {
-                UdonException.ThrowArgumentNullException(nameof(chars));
+                ExceptionHelper.ThrowArgumentNullException(nameof(chars));
             }
 
             var buf = new byte[chars.Length * 4];
@@ -43,13 +42,13 @@ namespace Koyashiro.UdonEncoding
                     }
                     else
                     {
-                        UdonException.ThrowArgumentException(EXCEPTION_INVALID_UNICODE_CODEPOINTS);
+                        ExceptionHelper.ThrowArgumentException(EXCEPTION_INVALID_UNICODE_CODEPOINTS);
                         return default;
                     }
                 }
                 else
                 {
-                    UdonException.ThrowArgumentException(EXCEPTION_INVALID_UNICODE_CODEPOINTS);
+                    ExceptionHelper.ThrowArgumentException(EXCEPTION_INVALID_UNICODE_CODEPOINTS);
                     return default;
                 }
             }
@@ -64,7 +63,7 @@ namespace Koyashiro.UdonEncoding
         {
             if (s == null)
             {
-                UdonException.ThrowArgumentNullException(nameof(s));
+                ExceptionHelper.ThrowArgumentNullException(nameof(s));
             }
 
             return GetBytes(s.ToCharArray());
@@ -74,7 +73,7 @@ namespace Koyashiro.UdonEncoding
         {
             if (bytes == null)
             {
-                UdonException.ThrowArgumentNullException(nameof(bytes));
+                ExceptionHelper.ThrowArgumentNullException(nameof(bytes));
             }
 
             var buf = new char[bytes.Length / 2];
@@ -86,7 +85,7 @@ namespace Koyashiro.UdonEncoding
 
                 if (0x10ffff < c)
                 {
-                    UdonException.ThrowArgumentException(EXCEPTION_INVALID_UNICODE_CODEPOINTS);
+                    ExceptionHelper.ThrowArgumentException(EXCEPTION_INVALID_UNICODE_CODEPOINTS);
                     return default;
                 }
 
@@ -112,7 +111,7 @@ namespace Koyashiro.UdonEncoding
         {
             if (bytes == null)
             {
-                UdonException.ThrowArgumentNullException(nameof(bytes));
+                ExceptionHelper.ThrowArgumentNullException(nameof(bytes));
             }
 
             var chars = GetChars(bytes);
