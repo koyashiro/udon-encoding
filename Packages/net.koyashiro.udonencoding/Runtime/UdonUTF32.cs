@@ -119,5 +119,57 @@ namespace Koyashiro.UdonEncoding
 
             return s;
         }
+
+        public static bool TryGetChars(byte[] bytes, out char[] output)
+        {
+            if (bytes == null)
+            {
+                output = default;
+                return false;
+            }
+
+            var buf = new char[bytes.Length / 2];
+            var count = 0;
+
+            for (var i = 0; i < bytes.Length / 4; i++)
+            {
+                var c = (uint)((bytes[i * 4 + 3] << 24) | (bytes[i * 4 + 2] << 16) | (bytes[i * 4 + 1] << 8) | bytes[i * 4]);
+
+                if (0x10ffff < c)
+                {
+                    output = default;
+                    return false;
+                }
+
+                if (c < 0x10000)
+                {
+                    buf[count++] = (char)c;
+                }
+                else
+                {
+                    buf[count++] = (char)((c - 0x10000) / 0x400 + 0xd800);
+                    // buf[count++] = (char)((c - 0x10000) % 0x400 + 0xd800);
+                    buf[count++] = (char)((c - 0x10000) - (0x400 * ((c - 0x10000) / 0x400)) + 0xdc00);
+                }
+            }
+
+            output = new char[count];
+            Array.Copy(buf, output, count);
+
+            return true;
+        }
+
+        public static bool TryGetString(byte[] bytes, out string output)
+        {
+            if (!TryGetChars(bytes, out var chars))
+            {
+                output = default;
+                return false;
+            }
+
+            output = new string(chars);
+
+            return true;
+        }
     }
 }
