@@ -87,7 +87,7 @@ namespace Koyashiro.UdonEncoding
                     buf[count++] = (byte)0x00;
                     buf[count++] = (byte)0x00;
                 }
-                else if (b < 0xe0)
+                else if (b < 0xe0 && i + 1 < bytes.Length)
                 {
                     var c = (uint)(((b & 0x1f) << 6) | (bytes[++i] & 0x3f));
                     buf[count++] = (byte)(c & 0xff);
@@ -95,7 +95,7 @@ namespace Koyashiro.UdonEncoding
                     buf[count++] = (byte)0x00;
                     buf[count++] = (byte)0x00;
                 }
-                else if (b < 0xf0)
+                else if (b < 0xf0 && i + 2 < bytes.Length)
                 {
                     var c = (uint)(((b & 0x0f) << 12) | ((bytes[++i] & 0x3f) << 6) | (bytes[++i] & 0x3f));
                     buf[count++] = (byte)(c & 0xff);
@@ -103,7 +103,7 @@ namespace Koyashiro.UdonEncoding
                     buf[count++] = (byte)((c >> 16) & 0xff);
                     buf[count++] = (byte)0x00;
                 }
-                else if (b < 0xf8)
+                else if (b < 0xf8 & i + 3 < bytes.Length)
                 {
                     var c = (uint)(((b & 0x07) << 18) | ((bytes[++i] & 0x3f) << 12) | ((bytes[++i] & 0x3f) << 6) | (bytes[++i] & 0x3f));
                     buf[count++] = (byte)(c & 0xff);
@@ -161,7 +161,7 @@ namespace Koyashiro.UdonEncoding
                     buf[count++] = (byte)0x00;
                     buf[count++] = (byte)0x00;
                 }
-                else if (b < 0xe0)
+                else if (b < 0xe0 && i + 1 < bytes.Length)
                 {
                     var c = (uint)(((b & 0x1f) << 6) | (bytes[++i] & 0x3f));
                     buf[count++] = (byte)(c & 0xff);
@@ -169,7 +169,7 @@ namespace Koyashiro.UdonEncoding
                     buf[count++] = (byte)0x00;
                     buf[count++] = (byte)0x00;
                 }
-                else if (b < 0xf0)
+                else if (b < 0xf0 && i + 2 < bytes.Length)
                 {
                     var c = (uint)(((b & 0x0f) << 12) | ((bytes[++i] & 0x3f) << 6) | (bytes[++i] & 0x3f));
                     buf[count++] = (byte)(c & 0xff);
@@ -177,7 +177,7 @@ namespace Koyashiro.UdonEncoding
                     buf[count++] = (byte)((c >> 16) & 0xff);
                     buf[count++] = (byte)0x00;
                 }
-                else if (b < 0xf8)
+                else if (b < 0xf8 && i + 3 < bytes.Length)
                 {
                     var c = (uint)(((b & 0x07) << 18) | ((bytes[++i] & 0x3f) << 12) | ((bytes[++i] & 0x3f) << 6) | (bytes[++i] & 0x3f));
                     buf[count++] = (byte)(c & 0xff);

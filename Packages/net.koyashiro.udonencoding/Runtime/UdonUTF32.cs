@@ -28,7 +28,7 @@ namespace Koyashiro.UdonEncoding
                     buf[count++] = (byte)0x00;
                     buf[count++] = (byte)0x00;
                 }
-                else if (c1 < 0xdbff)
+                else if (c1 < 0xdbff && i + 1 < chars.Length)
                 {
                     var c2 = chars[++i];
 

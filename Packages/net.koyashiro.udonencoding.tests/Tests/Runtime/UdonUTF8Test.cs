@@ -28,6 +28,18 @@ namespace Koyashiro
                 Assert.Equal("あいう", output);
                 Assert.True(UdonUTF8.TryGetString(new byte[] { 0xf0, 0x9f, 0xa4, 0x94, 0xf0, 0x9f, 0x8d, 0x9b, 0xf0, 0x9f, 0x8d, 0xa3 }, out output));
                 Assert.Equal("🤔🍛🍣", output);
+                Assert.False(UdonUTF8.TryGetString(new byte[] { 0xc2 }, out output));
+                Assert.Equal(null, output);
+                Assert.False(UdonUTF8.TryGetString(new byte[] { 0xe3 }, out output));
+                Assert.Equal(null, output);
+                Assert.False(UdonUTF8.TryGetString(new byte[] { 0xe3, 0x81 }, out output));
+                Assert.Equal(null, output);
+                Assert.False(UdonUTF8.TryGetString(new byte[] { 0xf0 }, out output));
+                Assert.Equal(null, output);
+                Assert.False(UdonUTF8.TryGetString(new byte[] { 0xf0, 0x9f }, out output));
+                Assert.Equal(null, output);
+                Assert.False(UdonUTF8.TryGetString(new byte[] { 0xf0, 0x9f, 0xa4 }, out output));
+                Assert.Equal(null, output);
             }
         }
     }
