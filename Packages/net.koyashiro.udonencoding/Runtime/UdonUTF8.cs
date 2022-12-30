@@ -138,5 +138,77 @@ namespace Koyashiro.UdonEncoding
 
             return s;
         }
+
+        public static bool TryGetChars(byte[] bytes, out char[] output)
+        {
+            if (bytes == null)
+            {
+                output = default;
+                return false;
+            }
+
+            var buf = new byte[bytes.Length * 4];
+            var count = 0;
+
+            for (var i = 0; i < bytes.Length; i++)
+            {
+                var b = bytes[i];
+
+                if (b < 0x80)
+                {
+                    buf[count++] = (byte)(b & 0xff);
+                    buf[count++] = (byte)0x00;
+                    buf[count++] = (byte)0x00;
+                    buf[count++] = (byte)0x00;
+                }
+                else if (b < 0xe0)
+                {
+                    var c = (uint)(((b & 0x1f) << 6) | (bytes[++i] & 0x3f));
+                    buf[count++] = (byte)(c & 0xff);
+                    buf[count++] = (byte)((c >> 8) & 0xff);
+                    buf[count++] = (byte)0x00;
+                    buf[count++] = (byte)0x00;
+                }
+                else if (b < 0xf0)
+                {
+                    var c = (uint)(((b & 0x0f) << 12) | ((bytes[++i] & 0x3f) << 6) | (bytes[++i] & 0x3f));
+                    buf[count++] = (byte)(c & 0xff);
+                    buf[count++] = (byte)((c >> 8) & 0xff);
+                    buf[count++] = (byte)((c >> 16) & 0xff);
+                    buf[count++] = (byte)0x00;
+                }
+                else if (b < 0xf8)
+                {
+                    var c = (uint)(((b & 0x07) << 18) | ((bytes[++i] & 0x3f) << 12) | ((bytes[++i] & 0x3f) << 6) | (bytes[++i] & 0x3f));
+                    buf[count++] = (byte)(c & 0xff);
+                    buf[count++] = (byte)((c >> 8) & 0xff);
+                    buf[count++] = (byte)((c >> 16) & 0xff);
+                    buf[count++] = (byte)((c >> 24) & 0xff);
+                }
+                else
+                {
+                    output = default;
+                    return false;
+                }
+            }
+
+            var utf32Bytes = new byte[count];
+            Array.Copy(buf, utf32Bytes, count);
+
+            return UdonUTF32.TryGetChars(utf32Bytes, out output);
+        }
+
+        public static bool TryGetString(byte[] bytes, out string output)
+        {
+            if (!TryGetChars(bytes, out var chars))
+            {
+                output = default;
+                return false;
+            }
+
+            output = new string(chars);
+
+            return true;
+        }
     }
 }
