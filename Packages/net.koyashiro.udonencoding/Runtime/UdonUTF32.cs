@@ -21,18 +21,17 @@ namespace Koyashiro.UdonEncoding
             {
                 var c1 = chars[i];
 
-                if (c1 < 0xd800)
+                if (0xd800 <= c1 && c1 < 0xdc00)
                 {
-                    buf[count++] = (byte)(c1 & 0xff);
-                    buf[count++] = (byte)((c1 >> 8) & 0xff);
-                    buf[count++] = (byte)0x00;
-                    buf[count++] = (byte)0x00;
-                }
-                else if (c1 < 0xdbff && i + 1 < chars.Length)
-                {
+                    if (i + 1 >= chars.Length)
+                    {
+                        ExceptionHelper.ThrowArgumentException(EXCEPTION_INVALID_UNICODE_CODEPOINTS);
+                        return default;
+                    }
+
                     var c2 = chars[++i];
 
-                    if (0xdc00 <= c2 && c2 < 0xdfff)
+                    if (0xdc00 <= c2 && c2 < 0xe000)
                     {
                         var n = (uint)(0x10000 + (c1 - 0xd800) * 0x400 + (c2 - 0xdc00));
                         buf[count++] = (byte)(n & 0xff);
@@ -48,8 +47,10 @@ namespace Koyashiro.UdonEncoding
                 }
                 else
                 {
-                    ExceptionHelper.ThrowArgumentException(EXCEPTION_INVALID_UNICODE_CODEPOINTS);
-                    return default;
+                    buf[count++] = (byte)(c1 & 0xff);
+                    buf[count++] = (byte)((c1 >> 8) & 0xff);
+                    buf[count++] = (byte)0x00;
+                    buf[count++] = (byte)0x00;
                 }
             }
 
