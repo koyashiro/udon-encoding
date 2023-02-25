@@ -1,10 +1,10 @@
 {
   "name": "net.koyashiro.udonencoding.tests",
   "displayName": "UdonEncoding.Tests",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "vpmDependencies": {
     "com.vrchat.udonsharp": "1.1.7",
-    "net.koyashiro.udonencoding": "0.4.1",
+    "net.koyashiro.udonencoding": "0.4.2",
     "net.koyashiro.udontest": "0.4.2"
   }
 }
