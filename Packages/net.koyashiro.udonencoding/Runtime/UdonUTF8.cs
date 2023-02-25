@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Koyashiro.UdonEncoding.Internal;
 
 namespace Koyashiro.UdonEncoding
