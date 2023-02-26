@@ -21,7 +21,7 @@ namespace Koyashiro.UdonEncoding
             {
                 var c1 = chars[i];
 
-                if (0xd800 <= c1 && c1 < 0xdc00)
+                if (char.IsHighSurrogate(c1))
                 {
                     if (i + 1 >= chars.Length)
                     {
@@ -31,9 +31,9 @@ namespace Koyashiro.UdonEncoding
 
                     var c2 = chars[++i];
 
-                    if (0xdc00 <= c2 && c2 < 0xe000)
+                    if (char.IsLowSurrogate(c2))
                     {
-                        var n = (uint)(0x10000 + (c1 - 0xd800) * 0x400 + (c2 - 0xdc00));
+                        var n = char.ConvertToUtf32(c1, c2);
                         buf[count++] = (byte)(n & 0xff);
                         buf[count++] = (byte)((n >> 8) & 0xff);
                         buf[count++] = (byte)((n >> 16) & 0xff);
@@ -82,23 +82,24 @@ namespace Koyashiro.UdonEncoding
 
             for (var i = 0; i < bytes.Length / 4; i++)
             {
-                var c = (uint)((bytes[i * 4 + 3] << 24) | (bytes[i * 4 + 2] << 16) | (bytes[i * 4 + 1] << 8) | bytes[i * 4]);
+                var c = (bytes[i * 4 + 3] << 24) | (bytes[i * 4 + 2] << 16) | (bytes[i * 4 + 1] << 8) | bytes[i * 4];
 
-                if (0x10ffff < c)
+                if (c < 0 || 0x10ffff < c || (0xd800 <= c && c < 0xe000))
                 {
                     ExceptionHelper.ThrowArgumentException(EXCEPTION_INVALID_UNICODE_CODEPOINTS);
                     return default;
                 }
 
+                var s = char.ConvertFromUtf32(c);
+
                 if (c < 0x10000)
                 {
-                    buf[count++] = (char)c;
+                    buf[count++] = s[0];
                 }
                 else
                 {
-                    buf[count++] = (char)((c - 0x10000) / 0x400 + 0xd800);
-                    // buf[count++] = (char)((c - 0x10000) % 0x400 + 0xd800);
-                    buf[count++] = (char)((c - 0x10000) - (0x400 * ((c - 0x10000) / 0x400)) + 0xdc00);
+                    buf[count++] = s[0];
+                    buf[count++] = s[1];
                 }
             }
 
@@ -134,23 +135,24 @@ namespace Koyashiro.UdonEncoding
 
             for (var i = 0; i < bytes.Length / 4; i++)
             {
-                var c = (uint)((bytes[i * 4 + 3] << 24) | (bytes[i * 4 + 2] << 16) | (bytes[i * 4 + 1] << 8) | bytes[i * 4]);
+                var c = (bytes[i * 4 + 3] << 24) | (bytes[i * 4 + 2] << 16) | (bytes[i * 4 + 1] << 8) | bytes[i * 4];
 
-                if (0x10ffff < c)
+                if (c < 0 || 0x10ffff < c || (0xd800 <= c && c < 0xe000))
                 {
                     output = default;
                     return false;
                 }
 
+                var s = char.ConvertFromUtf32(c);
+
                 if (c < 0x10000)
                 {
-                    buf[count++] = (char)c;
+                    buf[count++] = s[0];
                 }
                 else
                 {
-                    buf[count++] = (char)((c - 0x10000) / 0x400 + 0xd800);
-                    // buf[count++] = (char)((c - 0x10000) % 0x400 + 0xd800);
-                    buf[count++] = (char)((c - 0x10000) - (0x400 * ((c - 0x10000) / 0x400)) + 0xdc00);
+                    buf[count++] = s[0];
+                    buf[count++] = s[1];
                 }
             }
 
