@@ -1,5 +1,9 @@
 # UdonEncoding
 
+> [!WARNING]
+> UdonEncoding has been archived.
+> Please use `System.Text.Encoding` exposed in version [3.5.2](https://creators.vrchat.com/releases/release-3-5-2/) instead.
+
 Unicode encoder/decoder for UdonSharp.
 
 ## Installation
