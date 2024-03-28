@@ -3,6 +3,7 @@ using Koyashiro.UdonEncoding.Internal;
 
 namespace Koyashiro.UdonEncoding
 {
+    [Obsolete("UdonUTF8 is obsolete. Use System.Text.Encoding instead.")]
     public static class UdonUTF8
     {
         private const string EXCEPTION_INVALID_UNICODE_CODEPOINTS = "The byte array contains invalid Unicode code points.";
